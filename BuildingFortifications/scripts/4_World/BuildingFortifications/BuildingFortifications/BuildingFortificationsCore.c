@@ -56,21 +56,15 @@ class BuildingFortficationsCore extends BaseBuildingBase
 						}
 
 						int EnableLogging = GetBuildingFortificationsConfig().Enable_Destroy_Logs;
-						if(EnableLogging >= 1)
+						if (EnableLogging >= 1 && resultingDamage > 0)
 						{
-							string FirstHalf = player.GetIdentity().GetName() + " (GUID: " +  player.GetIdentity().GetId() + ")" + " Shot From: " + distance + "m" + " with Weapon =: "+ source.GetDisplayName() + " at " + this.GetDisplayName();
+							string FirstHalf;
+							if (player && player.GetIdentity())
+								FirstHalf = player.GetIdentity().GetName() + " (GUID: " + player.GetIdentity().GetId() + ") Shot From: " + distance + "m with Weapon =: " + source.GetDisplayName() + " at " + this.GetDisplayName();
+							else
+								FirstHalf = "Shot From: " + distance + "m with Source =: " + source.GetDisplayName() + " at " + this.GetDisplayName();
 							string SecondHalf = " Damage Done: " + resultingDamage + " To Zone Part: " + zoneName + "  Current Health: " + GetHealth(zoneName, "Health") + " at Postion: " + this.GetPosition();
-							if (resultingDamage > 0)
-							{
-								if (player && player.GetIdentity())
-								{
-									GetGame().AdminLog(FirstHalf + SecondHalf);
-								}
-								else
-								{
-									GetGame().AdminLog(FirstHalf + SecondHalf);
-								}
-							}
+							GetGame().AdminLog(FirstHalf + SecondHalf);
 						}
 					}
 				}
