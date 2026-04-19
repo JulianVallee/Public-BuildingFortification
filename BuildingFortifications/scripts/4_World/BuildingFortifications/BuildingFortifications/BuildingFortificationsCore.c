@@ -36,41 +36,42 @@ class BuildingFortficationsCore extends BaseBuildingBase
 				GetDamageZones(FullZonesList);
 				int i;
 				for (i = 0; i < FullZonesList.Count(); i++)
-	
-				float zoneDmg = damageResult.GetDamage(FullZonesList.Get(i), "Health");
-				string zoneName = FullZonesList.Get(i);
-				float beforeHealth = GetHealth(zoneName, "Health");
-				if (zoneDmg > 0)
 				{
-					float HealBackAmount = zoneDmg - (zoneDmg * GetDmgPercentage(damageType));
-					
-					float resultingDamage = zoneDmg;
-					if (HealBackAmount > 0 && beforeHealth >= 10)
+					float zoneDmg = damageResult.GetDamage(FullZonesList.Get(i), "Health");
+					string zoneName = FullZonesList.Get(i);
+					float beforeHealth = GetHealth(zoneName, "Health");
+					if (zoneDmg > 0)
 					{
-						if (HealBackAmount > zoneDmg)
-						{
-							HealBackAmount = zoneDmg;
-						}
-						AddHealth(zoneName, "Health", HealBackAmount);
-						resultingDamage = zoneDmg - HealBackAmount;
-					}
+						float HealBackAmount = zoneDmg - (zoneDmg * GetDmgPercentage(damageType));
 
-					int EnableLogging = GetBuildingFortificationsConfig().Enable_Destroy_Logs;
-					if(EnableLogging >= 1)
-					{
-						string FirstHalf = player.GetIdentity().GetName() + " (GUID: " +  player.GetIdentity().GetId() + ")" + " Shot From: " + distance + "m" + " with Weapon =: "+ source.GetDisplayName() + " at " + this.GetDisplayName();
-						string SecondHalf = " Damage Done: " + resultingDamage + " To Zone Part: " + zoneName + "  Current Health: " + GetHealth(zoneName, "Health") + " at Postion: " + this.GetPosition();
-						if (resultingDamage > 0)
+						float resultingDamage = zoneDmg;
+						if (HealBackAmount > 0 && beforeHealth >= 10)
 						{
-							if (player && player.GetIdentity())
+							if (HealBackAmount > zoneDmg)
 							{
-								GetGame().AdminLog(FirstHalf + SecondHalf);
+								HealBackAmount = zoneDmg;
 							}
-							else
+							AddHealth(zoneName, "Health", HealBackAmount);
+							resultingDamage = zoneDmg - HealBackAmount;
+						}
+
+						int EnableLogging = GetBuildingFortificationsConfig().Enable_Destroy_Logs;
+						if(EnableLogging >= 1)
+						{
+							string FirstHalf = player.GetIdentity().GetName() + " (GUID: " +  player.GetIdentity().GetId() + ")" + " Shot From: " + distance + "m" + " with Weapon =: "+ source.GetDisplayName() + " at " + this.GetDisplayName();
+							string SecondHalf = " Damage Done: " + resultingDamage + " To Zone Part: " + zoneName + "  Current Health: " + GetHealth(zoneName, "Health") + " at Postion: " + this.GetPosition();
+							if (resultingDamage > 0)
 							{
-								GetGame().AdminLog(FirstHalf + SecondHalf);
+								if (player && player.GetIdentity())
+								{
+									GetGame().AdminLog(FirstHalf + SecondHalf);
+								}
+								else
+								{
+									GetGame().AdminLog(FirstHalf + SecondHalf);
+								}
 							}
-						}	
+						}
 					}
 				}
 			}
