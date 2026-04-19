@@ -83,8 +83,11 @@ class BuildingFortificationsConfig: BuildingFortificationsConfig_V5
 			JsonFileLoader<BuildingFortificationsConfig>.JsonSaveFile(ProfileFolder, bfConfig);
 		}
 
-		//! Set configuration base damage setting based on vanilla cfgGameplay.json "disableBaseDamage" value for this configuration class instance.
-		bfConfig.Disable_Base_Damage = GetGame().ServerConfigGetInt("disableBaseDamage");
+		//! Inherit vanilla cfgGameplay.json "disableBaseDamage" only when the admin
+		//! hasn't opted in via the mod's JSON. Without this guard the JSON value
+		//! is overwritten on every load (see issue #6).
+		if (bfConfig.Disable_Base_Damage < 1)
+			bfConfig.Disable_Base_Damage = GetGame().ServerConfigGetInt("disableBaseDamage");
 
 		return bfConfig;
 	}
